@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guest Reviews - Система проверки гостей</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #fafafa;
+            color: #1d1d1f;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: #1d1d1f;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .btn {
+            background: #1d1d1f;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background: #2d2d2f;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #1d1d1f;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .btn-secondary:hover {
+            background: #fafafa;
+            border-color: #d0d0d0;
+        }
+        
+        .btn-danger {
+            background: #ff3b30;
+        }
+        
+        .btn-danger:hover {
+            background: #ff453a;
+        }
+        
+        .auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 18px;
+            padding: 48px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            max-width: 440px;
+            width: 100%;
+        }
+        
+        .auth-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .auth-subtitle {
+            color: #86868b;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+        
+        .welcome-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px;
+            background: #fafafa;
+        }
+        
+        .welcome-content {
+            max-width: 1000px;
+        }
+        
+        .welcome-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 32px;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .welcome-title {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+        
+        .welcome-title .highlight {
+            color: #666;
+        }
+        
+        .welcome-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 48px;
+            font-weight: 400;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .welcome-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 80px;
+        }
+        
+        .btn-large {
+            padding: 16px 40px;
+            font-size: 16px;
+            border-radius: 12px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 32px 28px;
+            border-radius: 16px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            border-color: #d0d0d0;
+        }
+        
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+        
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .main-content {
+            padding: 40px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e5e5;
+        }
+        
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: #1d1d1f;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 0;
+            padding: 0 40px;
+        }
+        
+        .tab {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+            top: 1px;
+        }
+        
+        .tab.active {
+            color: #1d1d1f;
+            border-bottom-color: #1d1d1f;
+        }
+        
+        .tab:hover {
+            color: #1d1d1f;
+        }
+        
+        .booking-item {
+            padding: 24px;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+        
+        .booking-item:hover {
+            border-color: #d0d0d0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .booking-info h3 {
+            font-size: 17px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        .booking-info p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .risk-badge {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .risk-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .risk-medium {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .risk-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .guest-profile {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 32px;
+        }
+        
+        .profile-sidebar {
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            margin: 0 auto 16px;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0071e3;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #86868b;
+            margin-top: 4px;
+        }
+        
+        .review-item {
+            padding: 20px;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        
+        .review-hotel {
+            font-weight: 600;
+        }
+        
+        .review-date {
+            color: #86868b;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 18px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #86868b;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .action-buttons .btn {
+            flex: 1;
+        }
+        
+        select.form-input {
+            cursor: pointer;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f7;
+        }
+        
+        .info-label {
+            color: #666;
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-title {
+                font-size: 48px;
+            }
+            
+            .welcome-buttons {
+                flex-direction: column;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding: 0 20px;
+            }
+            
+            .booking-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .header-content {
+                padding: 0 20px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 24px;
+            }
+        }
+        
+        /* Анимации появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-fade {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .animate-scale {
+            animation: scaleIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Задержки для поэтапного появления */
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+        .delay-7 { animation-delay: 0.7s; }
+        .delay-8 { animation-delay: 0.8s; }
+        .delay-9 { animation-delay: 0.9s; }
+        .delay-10 { animation-delay: 1s; }
+        .delay-11 { animation-delay: 1.1s; }
+        .delay-12 { animation-delay: 1.2s; }
+        .delay-13 { animation-delay: 1.3s; }
+        .delay-14 { animation-delay: 1.4s; }
+    </style>
+</head>
+<body>
+    <!-- Экран авторизации -->
+    <div id="authScreen" class="auth-screen">
+        <div class="auth-card">
+            <h1 class="auth-title">Guest Reviews</h1>
+            <p class="auth-subtitle">Система проверки гостей для отелей</p>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="loginEmail" placeholder="example@hotel.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="••••••••">
+                </div>
+                <button class="btn" style="width: 100%; margin-bottom: 16px;" onclick="login()">Войти</button>
+                <button class="btn btn-secondary" style="width: 100%;" onclick="showRegister()">Регистрация</button>
+            </div>
+            
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label class="form-label">Название отеля</label>
+                    <input type="text" class="form-input" id="regHotelName" placeholder="Мой отель">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="regEmail" placeholder="example@hotel.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-input" id="regPassword" placeholder="••••••••">
+                </div>
+                <button class="btn" style="width: 100%; margin-bottom: 16px;" onclick="register()">Создать аккаунт</button>
+                <button class="btn btn-secondary" style="width: 100%;" onclick="showLogin()">Уже есть аккаунт</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Приветственный экран -->
+    <div id="welcomeScreen" class="welcome-screen hidden">
+        <div class="welcome-content">
+            <div class="welcome-badge">
+                <span>🎯</span>
+                Исследовательский проект 2026
+            </div>
+            
+            <h1 class="welcome-title">
+                Guest<br><span class="highlight">Reviews</span>
+            </h1>
+            <p class="welcome-subtitle">
+                Система отзывов на клиентов для отелей. Помогаем отелям сохранить деньги и избежать проблем с клиентами, которые наносят ущерб или не платят
+            </p>
+            
+            <div class="welcome-buttons">
+                <button class="btn btn-large" onclick="goToApp()">Перейти к функционалу</button>
+                <button class="btn btn-secondary btn-large" onclick="alert('Демо-режим уже активен!')">Как это работает</button>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">�</div>
+                    <h3 class="feature-title">Бронирование</h3>
+                    <p class="feature-desc">Клиент бронирует через сайт или стороннее приложение (Booking, OTA)</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Анализ клиента</h3>
+                    <p class="feature-desc">Система собирает отзывы от других отелей на этого клиента и анализирует историю</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3 class="feature-title">Принятие решения</h3>
+                    <p class="feature-desc">Отель получает рекомендацию: одобрить, отменить бронь или удержать депозит</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Защита</h3>
+                    <p class="feature-desc">Автоматическое удержание депозита при выявлении рисков</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основное приложение -->
+    <div id="mainApp" class="hidden">
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">G</div>
+                    <span>GuestReviews</span>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">Выйти</button>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('bookings')">Бронирования</button>
+            <button class="tab" onclick="showTab('guests')">Гости</button>
+            <button class="tab" onclick="showTab('reviews')">Отзывы</button>
+            <button class="tab" onclick="showTab('deposits')">Депозиты</button>
+            <button class="tab" onclick="showTab('analytics')">Аналитика</button>
+        </div>
+        
+        <div class="container main-content">
+            
+            <!-- Раздел: Бронирования -->
+            <div id="bookingsTab" class="tab-content">
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h2 class="card-title" style="margin: 0;">Бронирования</h2>
+                        <button class="btn" onclick="openNewBookingModal()">+ Новая бронь</button>
+                    </div>
+                    <div id="bookingsList"></div>
+                </div>
+            </div>
+            
+            <!-- Раздел: Гости -->
+            <div id="guestsTab" class="tab-content hidden">
+                <div class="card">
+                    <h2 class="card-title">База гостей</h2>
+                    <div id="guestsList"></div>
+                </div>
+            </div>
+            
+            <!-- Раздел: Отзывы -->
+            <div id="reviewsTab" class="tab-content hidden">
+                <div class="card">
+                    <h2 class="card-title">Отзывы на гостей</h2>
+                    <div id="reviewsList"></div>
+                </div>
+            </div>
+            
+            <!-- Раздел: Депозиты -->
+            <div id="depositsTab" class="tab-content hidden">
+                <div class="card">
+                    <h2 class="card-title">Управление депозитами</h2>
+                    <div id="depositsList"></div>
+                </div>
+            </div>
+            
+            <!-- Раздел: Аналитика -->
+            <div id="analyticsTab" class="tab-content hidden">
+                <div class="card">
+                    <h2 class="card-title">Аналитика</h2>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalBookings">0</div>
+                            <div class="stat-label">Всего броней</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalGuests">0</div>
+                            <div class="stat-label">Гостей в базе</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalReviews">0</div>
+                            <div class="stat-label">Отзывов</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Новая бронь -->
+    <div id="newBookingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Новая бронь</h2>
+                <button class="close-btn" onclick="closeModal('newBookingModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Имя гостя</label>
+                <input type="text" class="form-input" id="bookingGuestName" placeholder="Иван Иванов">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email гостя</label>
+                <input type="email" class="form-input" id="bookingGuestEmail" placeholder="guest@example.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Телефон</label>
+                <input type="tel" class="form-input" id="bookingGuestPhone" placeholder="+7 900 123-45-67">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Дата заезда</label>
+                <input type="date" class="form-input" id="bookingCheckIn">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Дата выезда</label>
+                <input type="date" class="form-input" id="bookingCheckOut">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Номер комнаты</label>
+                <input type="text" class="form-input" id="bookingRoom" placeholder="101">
+            </div>
+            <button class="btn" style="width: 100%;" onclick="createBooking()">Создать бронь и проверить гостя</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно: Детали брони -->
+    <div id="bookingDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Детали брони</h2>
+                <button class="close-btn" onclick="closeModal('bookingDetailsModal')">&times;</button>
+            </div>
+            <div id="bookingDetailsContent"></div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно: Профиль гостя -->
+    <div id="guestProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Профиль гостя</h2>
+                <button class="close-btn" onclick="closeModal('guestProfileModal')">&times;</button>
+            </div>
+            <div id="guestProfileContent"></div>
+        </div>
+    </div>
+    
+    <!-- Модальное окно: Новый отзыв -->
+    <div id="newReviewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Оставить отзыв</h2>
+                <button class="close-btn" onclick="closeModal('newReviewModal')">&times;</button>
+            </div>
+            <input type="hidden" id="reviewBookingId">
+            <div class="form-group">
+                <label class="form-label">Оценка поведения</label>
+                <select class="form-input" id="reviewRating">
+                    <option value="5">Отлично</option>
+                    <option value="4">Хорошо</option>
+                    <option value="3">Удовлетворительно</option>
+                    <option value="2">Плохо</option>
+                    <option value="1">Очень плохо</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Комментарий</label>
+                <textarea class="form-input" id="reviewComment" placeholder="Опишите поведение гостя..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Были ли инциденты?</label>
+                <select class="form-input" id="reviewIncident">
+                    <option value="no">Нет</option>
+                    <option value="yes">Да</option>
+                </select>
+            </div>
+            <button class="btn" style="width: 100%;" onclick="submitReview()">Отправить отзыв</button>
+        </div>
+    </div>
+
+    <script>
+        // Локальное хранилище данных (замена серверу)
+        let currentUser = null;
+        let bookings = [];
+        let guests = [];
+        let reviews = [];
+        let deposits = [];
+        
+        // Инициализация при загрузке
+        window.onload = function() {
+            loadData();
+            initDemoData();
+            checkAuth();
+        };
+        
+        // Загрузка данных из localStorage
+        function loadData() {
+            bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            guests = JSON.parse(localStorage.getItem('guests') || '[]');
+            reviews = JSON.parse(localStorage.getItem('reviews') || '[]');
+            deposits = JSON.parse(localStorage.getItem('deposits') || '[]');
+        }
+        
+        // Инициализация демо-данных
+        function initDemoData() {
+            if (localStorage.getItem('demoDataLoaded')) return;
+            
+            // Демо-гости
+            const demoGuests = [
+                { id: 1001, name: 'Алексей Иванов', email: 'ivanov@mail.ru', phone: '+7 916 123-45-67', createdAt: '2024-01-15T10:00:00' },
+                { id: 1002, name: 'Мария Петрова', email: 'petrova@gmail.com', phone: '+7 925 234-56-78', createdAt: '2024-01-20T14:30:00' },
+                { id: 1003, name: 'Дмитрий Сидоров', email: 'sidorov@yandex.ru', phone: '+7 903 345-67-89', createdAt: '2024-02-05T09:15:00' },
+                { id: 1004, name: 'Елена Козлова', email: 'kozlova@mail.ru', phone: '+7 917 456-78-90', createdAt: '2024-02-10T16:45:00' },
+                { id: 1005, name: 'Сергей Новиков', email: 'novikov@gmail.com', phone: '+7 926 567-89-01', createdAt: '2024-02-15T11:20:00' },
+                { id: 1006, name: 'Ольга Морозова', email: 'morozova@yandex.ru', phone: '+7 915 678-90-12', createdAt: '2024-02-20T13:00:00' },
+                { id: 1007, name: 'Андрей Волков', email: 'volkov@mail.ru', phone: '+7 905 789-01-23', createdAt: '2024-03-01T10:30:00' },
+                { id: 1008, name: 'Наталья Соколова', email: 'sokolova@gmail.com', phone: '+7 916 890-12-34', createdAt: '2024-03-05T15:15:00' },
+                { id: 1009, name: 'Игорь Лебедев', email: 'lebedev@yandex.ru', phone: '+7 925 901-23-45', createdAt: '2024-03-10T12:00:00' },
+                { id: 1010, name: 'Татьяна Павлова', email: 'pavlova@mail.ru', phone: '+7 903 012-34-56', createdAt: '2024-03-15T14:45:00' },
+                { id: 1011, name: 'Владимир Семенов', email: 'semenov@gmail.com', phone: '+7 917 123-45-67', createdAt: '2024-03-18T09:30:00' },
+                { id: 1012, name: 'Анна Федорова', email: 'fedorova@yandex.ru', phone: '+7 926 234-56-78', createdAt: '2024-03-20T11:00:00' }
+            ];
+            
+            // Демо-бронирования
+            const demoBookings = [
+                { id: 2001, guestId: 1001, guestName: 'Алексей Иванов', checkIn: '2024-03-25', checkOut: '2024-03-28', room: '101', status: 'completed', riskLevel: 'low', riskScore: 85, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-03-20T10:00:00' },
+                { id: 2002, guestId: 1002, guestName: 'Мария Петрова', checkIn: '2024-03-26', checkOut: '2024-03-30', room: '205', status: 'completed', riskLevel: 'low', riskScore: 90, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-03-21T14:30:00' },
+                { id: 2003, guestId: 1003, guestName: 'Дмитрий Сидоров', checkIn: '2024-03-27', checkOut: '2024-03-29', room: '310', status: 'completed', riskLevel: 'high', riskScore: 25, recommendation: 'Высокий риск. Требуется депозит 10000₽ или отказ', createdAt: '2024-03-22T09:15:00' },
+                { id: 2004, guestId: 1004, guestName: 'Елена Козлова', checkIn: '2024-03-28', checkOut: '2024-04-02', room: '102', status: 'active', riskLevel: 'medium', riskScore: 55, recommendation: 'Средний риск. Рекомендуется депозит 5000₽', createdAt: '2024-03-23T16:45:00' },
+                { id: 2005, guestId: 1005, guestName: 'Сергей Новиков', checkIn: '2024-03-29', checkOut: '2024-04-01', room: '208', status: 'active', riskLevel: 'low', riskScore: 80, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-03-24T11:20:00' },
+                { id: 2006, guestId: 1006, guestName: 'Ольга Морозова', checkIn: '2024-03-30', checkOut: '2024-04-03', room: '315', status: 'pending', riskLevel: 'medium', riskScore: 50, recommendation: 'Новый гость. Рекомендуется взять депозит 5000₽', createdAt: '2024-03-25T13:00:00' },
+                { id: 2007, guestId: 1007, guestName: 'Андрей Волков', checkIn: '2024-04-01', checkOut: '2024-04-05', room: '105', status: 'pending', riskLevel: 'medium', riskScore: 60, recommendation: 'Средний риск. Рекомендуется депозит 5000₽', createdAt: '2024-03-26T10:30:00' },
+                { id: 2008, guestId: 1008, guestName: 'Наталья Соколова', checkIn: '2024-04-02', checkOut: '2024-04-06', room: '210', status: 'pending', riskLevel: 'low', riskScore: 88, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-03-27T15:15:00' },
+                { id: 2009, guestId: 1009, guestName: 'Игорь Лебедев', checkIn: '2024-04-03', checkOut: '2024-04-07', room: '320', status: 'pending', riskLevel: 'high', riskScore: 30, recommendation: 'Высокий риск. Требуется депозит 10000₽ или отказ', createdAt: '2024-03-28T12:00:00' },
+                { id: 2010, guestId: 1010, guestName: 'Татьяна Павлова', checkIn: '2024-04-04', checkOut: '2024-04-08', room: '108', status: 'pending', riskLevel: 'low', riskScore: 92, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-03-29T14:45:00' },
+                { id: 2011, guestId: 1011, guestName: 'Владимир Семенов', checkIn: '2024-04-05', checkOut: '2024-04-09', room: '215', status: 'pending', riskLevel: 'medium', riskScore: 50, recommendation: 'Новый гость. Рекомендуется взять депозит 5000₽', createdAt: '2024-03-30T09:30:00' },
+                { id: 2012, guestId: 1012, guestName: 'Анна Федорова', checkIn: '2024-04-06', checkOut: '2024-04-10', room: '325', status: 'pending', riskLevel: 'medium', riskScore: 50, recommendation: 'Новый гость. Рекомендуется взять депозит 5000₽', createdAt: '2024-03-31T11:00:00' },
+                { id: 2013, guestId: 1001, guestName: 'Алексей Иванов', checkIn: '2024-04-10', checkOut: '2024-04-13', room: '103', status: 'pending', riskLevel: 'low', riskScore: 85, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-04-01T10:00:00' },
+                { id: 2014, guestId: 1002, guestName: 'Мария Петрова', checkIn: '2024-04-12', checkOut: '2024-04-15', room: '220', status: 'pending', riskLevel: 'low', riskScore: 90, recommendation: 'Надежный гость. Можно заселить без депозита', createdAt: '2024-04-02T14:30:00' }
+            ];
+            
+            // Демо-отзывы
+            const demoReviews = [
+                { id: 3001, bookingId: 2001, guestId: 1001, rating: 5, comment: 'Отличный гость, вежливый и аккуратный. Номер оставил в идеальном состоянии.', hasIncident: false, createdAt: '2024-03-28T12:00:00' },
+                { id: 3002, bookingId: 2002, guestId: 1002, rating: 5, comment: 'Очень приятная гостья, соблюдала все правила отеля. Рекомендую!', hasIncident: false, createdAt: '2024-03-30T15:00:00' },
+                { id: 3003, bookingId: 2003, guestId: 1003, rating: 2, comment: 'Были жалобы от соседей на шум. Повреждена мебель в номере. Депозит частично удержан.', hasIncident: true, createdAt: '2024-03-29T18:00:00' },
+                { id: 3004, guestId: 1001, rating: 5, comment: 'Постоянный гость, всегда приятно с ним работать.', hasIncident: false, createdAt: '2024-02-15T12:00:00' },
+                { id: 3005, guestId: 1002, rating: 5, comment: 'Пунктуальная, культурная. Без замечаний.', hasIncident: false, createdAt: '2024-02-20T14:00:00' },
+                { id: 3006, guestId: 1003, rating: 3, comment: 'Были небольшие проблемы с оплатой дополнительных услуг.', hasIncident: false, createdAt: '2024-02-25T16:00:00' },
+                { id: 3007, guestId: 1005, rating: 4, comment: 'Хороший гость, небольшая задержка при выезде.', hasIncident: false, createdAt: '2024-03-10T11:00:00' },
+                { id: 3008, guestId: 1007, rating: 4, comment: 'Все прошло хорошо, но курил в номере несмотря на запрет.', hasIncident: false, createdAt: '2024-03-15T13:00:00' },
+                { id: 3009, guestId: 1008, rating: 5, comment: 'Идеальная гостья! Очень довольны.', hasIncident: false, createdAt: '2024-03-18T10:00:00' },
+                { id: 3010, guestId: 1009, rating: 1, comment: 'Серьезный инцидент - разбито окно, испорчен ковер. Полиция была вызвана.', hasIncident: true, createdAt: '2024-03-20T20:00:00' },
+                { id: 3011, guestId: 1010, rating: 5, comment: 'Замечательная гостья, оставила благодарность персоналу.', hasIncident: false, createdAt: '2024-03-22T12:00:00' }
+            ];
+            
+            // Демо-депозиты
+            const demoDeposits = [
+                { id: 4001, bookingId: 2003, guestId: 1003, amount: 10000, status: 'charged', createdAt: '2024-03-27T09:15:00' },
+                { id: 4002, bookingId: 2004, guestId: 1004, amount: 5000, status: 'held', createdAt: '2024-03-28T16:45:00' },
+                { id: 4003, bookingId: 2006, guestId: 1006, amount: 5000, status: 'pending', createdAt: '2024-03-30T13:00:00' },
+                { id: 4004, bookingId: 2007, guestId: 1007, amount: 5000, status: 'pending', createdAt: '2024-04-01T10:30:00' },
+                { id: 4005, bookingId: 2009, guestId: 1009, amount: 10000, status: 'pending', createdAt: '2024-04-03T12:00:00' },
+                { id: 4006, bookingId: 2011, guestId: 1011, amount: 5000, status: 'pending', createdAt: '2024-04-05T09:30:00' },
+                { id: 4007, bookingId: 2012, guestId: 1012, amount: 5000, status: 'pending', createdAt: '2024-04-06T11:00:00' }
+            ];
+            
+            guests = demoGuests;
+            bookings = demoBookings;
+            reviews = demoReviews;
+            deposits = demoDeposits;
+            
+            saveData();
+            localStorage.setItem('demoDataLoaded', 'true');
+        }
+        
+        // Сохранение данных в localStorage
+        function saveData() {
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+            localStorage.setItem('guests', JSON.stringify(guests));
+            localStorage.setItem('reviews', JSON.stringify(reviews));
+            localStorage.setItem('deposits', JSON.stringify(deposits));
+        }
+        
+        // Проверка авторизации
+        function checkAuth() {
+            currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            if (currentUser) {
+                document.getElementById('authScreen').classList.add('hidden');
+                document.getElementById('welcomeScreen').classList.remove('hidden');
+                // Запуск анимации приветственного экрана
+                setTimeout(() => {
+                    const elements = document.querySelectorAll('.welcome-badge, .welcome-title, .welcome-subtitle, .welcome-buttons');
+                    elements.forEach((el, i) => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            el.style.transition = 'all 0.4s ease-out';
+                            el.style.opacity = '1';
+                            el.style.transform = 'translateY(0)';
+                        }, i * 80);
+                    });
+                    
+                    const cards = document.querySelectorAll('.feature-card');
+                    cards.forEach((card, i) => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            card.style.transition = 'all 0.3s ease-out';
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                        }, 320 + i * 60);
+                    });
+                }, 50);
+            }
+        }
+        
+        // Показать форму регистрации
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+        
+        // Показать форму входа
+        function showLogin() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+        
+        // Регистрация
+        function register() {
+            const hotelName = document.getElementById('regHotelName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            if (!hotelName || !email || !password) {
+                alert('Заполните все поля');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.email === email)) {
+                alert('Пользователь с таким email уже существует');
+                return;
+            }
+            
+            const newUser = { id: Date.now(), hotelName, email, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            
+            // Анимация появления приветственного экрана
+            setTimeout(() => {
+                const elements = document.querySelectorAll('.welcome-badge, .welcome-title, .welcome-subtitle, .welcome-buttons');
+                elements.forEach((el, i) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.4s ease-out';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, i * 80);
+                });
+                
+                const cards = document.querySelectorAll('.feature-card');
+                cards.forEach((card, i) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.3s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, 320 + i * 60);
+                });
+            }, 50);
+        }
+        
+        // Вход
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Заполните все поля');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                alert('Неверный email или пароль');
+                return;
+            }
+            
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            
+            // Анимация появления приветственного экрана
+            setTimeout(() => {
+                const elements = document.querySelectorAll('.welcome-badge, .welcome-title, .welcome-subtitle, .welcome-buttons');
+                elements.forEach((el, i) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.4s ease-out';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, i * 80);
+                });
+                
+                const cards = document.querySelectorAll('.feature-card');
+                cards.forEach((card, i) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.3s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, 320 + i * 60);
+                });
+            }, 50);
+        }
+        
+        // Выход
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('authScreen').classList.remove('hidden');
+            showLogin();
+        }
+        
+        // Переход к приложению
+        function goToApp() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            renderBookings();
+            updateAnalytics();
+            animateElements();
+        }
+        
+        // Анимация элементов при загрузке
+        function animateElements() {
+            const items = document.querySelectorAll('.booking-item, .review-item, .stat-item');
+            items.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(15px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.3s ease-out';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, index * 30);
+            });
+        }
+        
+        // Переключение вкладок
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            if (tabName === 'bookings') renderBookings();
+            if (tabName === 'guests') renderGuests();
+            if (tabName === 'reviews') renderReviews();
+            if (tabName === 'deposits') renderDeposits();
+            if (tabName === 'analytics') updateAnalytics();
+            
+            // Анимация при переключении вкладок
+            setTimeout(() => animateElements(), 20);
+        }
+        
+        // Открыть/закрыть модальное окно
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            const content = modal.querySelector('.modal-content');
+            content.style.opacity = '0';
+            content.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                content.style.transition = 'all 0.2s ease-out';
+                content.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }, 10);
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const content = modal.querySelector('.modal-content');
+            content.style.opacity = '0';
+            content.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 150);
+        }
+        
+        function openNewBookingModal() {
+            openModal('newBookingModal');
+        }
+        
+        // Создание брони
+        function createBooking() {
+            const guestName = document.getElementById('bookingGuestName').value;
+            const guestEmail = document.getElementById('bookingGuestEmail').value;
+            const guestPhone = document.getElementById('bookingGuestPhone').value;
+            const checkIn = document.getElementById('bookingCheckIn').value;
+            const checkOut = document.getElementById('bookingCheckOut').value;
+            const room = document.getElementById('bookingRoom').value;
+            
+            if (!guestName || !guestEmail || !checkIn || !checkOut || !room) {
+                alert('Заполните все обязательные поля');
+                return;
+            }
+            
+            // Найти или создать гостя
+            let guest = guests.find(g => g.email === guestEmail);
+            if (!guest) {
+                guest = {
+                    id: Date.now(),
+                    name: guestName,
+                    email: guestEmail,
+                    phone: guestPhone,
+                    createdAt: new Date().toISOString()
+                };
+                guests.push(guest);
+            }
+            
+            // Расчет риска
+            const riskScore = calculateRisk(guest.id);
+            
+            // Создание брони
+            const booking = {
+                id: Date.now(),
+                guestId: guest.id,
+                guestName: guestName,
+                checkIn: checkIn,
+                checkOut: checkOut,
+                room: room,
+                status: 'pending',
+                riskLevel: riskScore.level,
+                riskScore: riskScore.score,
+                recommendation: riskScore.recommendation,
+                createdAt: new Date().toISOString()
+            };
+            
+            bookings.push(booking);
+            
+            // Создание депозита если нужно
+            if (riskScore.level === 'medium' || riskScore.level === 'high') {
+                const depositAmount = riskScore.level === 'high' ? 10000 : 5000;
+                deposits.push({
+                    id: Date.now(),
+                    bookingId: booking.id,
+                    guestId: guest.id,
+                    amount: depositAmount,
+                    status: 'pending',
+                    createdAt: new Date().toISOString()
+                });
+            }
+            
+            saveData();
+            closeModal('newBookingModal');
+            renderBookings();
+            
+            // Очистка формы
+            document.getElementById('bookingGuestName').value = '';
+            document.getElementById('bookingGuestEmail').value = '';
+            document.getElementById('bookingGuestPhone').value = '';
+            document.getElementById('bookingCheckIn').value = '';
+            document.getElementById('bookingCheckOut').value = '';
+            document.getElementById('bookingRoom').value = '';
+            
+            alert(`Бронь создана!\nУровень риска: ${riskScore.level}\nРекомендация: ${riskScore.recommendation}`);
+        }
+        
+        // Расчет риска
+        function calculateRisk(guestId) {
+            const guestReviews = reviews.filter(r => r.guestId === guestId);
+            
+            if (guestReviews.length === 0) {
+                return {
+                    score: 50,
+                    level: 'medium',
+                    recommendation: 'Новый гость. Рекомендуется взять депозит 5000₽'
+                };
+            }
+            
+            const avgRating = guestReviews.reduce((sum, r) => sum + r.rating, 0) / guestReviews.length;
+            const hasIncidents = guestReviews.some(r => r.hasIncident);
+            
+            let score = avgRating * 20;
+            if (hasIncidents) score -= 30;
+            
+            let level, recommendation;
+            if (score >= 70) {
+                level = 'low';
+                recommendation = 'Надежный гость. Можно заселить без депозита';
+            } else if (score >= 40) {
+                level = 'medium';
+                recommendation = 'Средний риск. Рекомендуется депозит 5000₽';
+            } else {
+                level = 'high';
+                recommendation = 'Высокий риск. Требуется депозит 10000₽ или отказ';
+            }
+            
+            return { score, level, recommendation };
+        }
+        
+        // Отрисовка списка броней
+        function renderBookings() {
+            const list = document.getElementById('bookingsList');
+            if (bookings.length === 0) {
+                list.innerHTML = '<p style="color: #86868b; text-align: center; padding: 40px;">Нет броней</p>';
+                return;
+            }
+            
+            list.innerHTML = bookings.map(b => `
+                <div class="booking-item">
+                    <div class="booking-info">
+                        <h3>${b.guestName}</h3>
+                        <p>Комната ${b.room} • ${formatDate(b.checkIn)} - ${formatDate(b.checkOut)}</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <span class="risk-badge risk-${b.riskLevel}">
+                            ${b.riskLevel === 'low' ? 'Низкий риск' : b.riskLevel === 'medium' ? 'Средний риск' : 'Высокий риск'}
+                        </span>
+                        <button class="btn btn-secondary" onclick="viewBooking(${b.id})">Детали</button>
+                        ${b.status === 'completed' ? '' : `<button class="btn" onclick="openReviewModal(${b.id})">Отзыв</button>`}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Просмотр деталей брони
+        function viewBooking(bookingId) {
+            const booking = bookings.find(b => b.id === bookingId);
+            const guest = guests.find(g => g.id === booking.guestId);
+            const deposit = deposits.find(d => d.bookingId === bookingId);
+            
+            const content = `
+                <div class="info-row">
+                    <span class="info-label">Гость</span>
+                    <span class="info-value">${booking.guestName}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email</span>
+                    <span class="info-value">${guest.email}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Комната</span>
+                    <span class="info-value">${booking.room}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Заезд</span>
+                    <span class="info-value">${formatDate(booking.checkIn)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Выезд</span>
+                    <span class="info-value">${formatDate(booking.checkOut)}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Уровень риска</span>
+                    <span class="info-value"><span class="risk-badge risk-${booking.riskLevel}">
+                        ${booking.riskLevel === 'low' ? 'Низкий' : booking.riskLevel === 'medium' ? 'Средний' : 'Высокий'}
+                    </span></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Рекомендация</span>
+                    <span class="info-value">${booking.recommendation}</span>
+                </div>
+                ${deposit ? `
+                <div class="info-row">
+                    <span class="info-label">Депозит</span>
+                    <span class="info-value">${deposit.amount}₽ (${deposit.status === 'pending' ? 'Ожидает' : deposit.status === 'held' ? 'Заблокирован' : 'Возвращен'})</span>
+                </div>
+                ` : ''}
+                <div class="action-buttons">
+                    <button class="btn" onclick="viewGuestProfile(${booking.guestId})">Профиль гостя</button>
+                    <button class="btn btn-secondary" onclick="closeModal('bookingDetailsModal')">Закрыть</button>
+                </div>
+            `;
+            
+            document.getElementById('bookingDetailsContent').innerHTML = content;
+            openModal('bookingDetailsModal');
+        }
+        
+        // Отрисовка списка гостей
+        function renderGuests() {
+            const list = document.getElementById('guestsList');
+            if (guests.length === 0) {
+                list.innerHTML = '<p style="color: #86868b; text-align: center; padding: 40px;">Нет гостей в базе</p>';
+                return;
+            }
+            
+            list.innerHTML = guests.map(g => {
+                const guestBookings = bookings.filter(b => b.guestId === g.id);
+                const guestReviews = reviews.filter(r => r.guestId === g.id);
+                const riskScore = calculateRisk(g.id);
+                
+                return `
+                    <div class="booking-item">
+                        <div class="booking-info">
+                            <h3>${g.name}</h3>
+                            <p>${g.email} • Броней: ${guestBookings.length} • Отзывов: ${guestReviews.length}</p>
+                        </div>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <span class="risk-badge risk-${riskScore.level}">
+                                Риск: ${riskScore.score}%
+                            </span>
+                            <button class="btn btn-secondary" onclick="viewGuestProfile(${g.id})">Профиль</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Просмотр профиля гостя
+        function viewGuestProfile(guestId) {
+            const guest = guests.find(g => g.id === guestId);
+            const guestBookings = bookings.filter(b => b.guestId === guestId);
+            const guestReviews = reviews.filter(r => r.guestId === guestId);
+            const riskScore = calculateRisk(guestId);
+            
+            const avgRating = guestReviews.length > 0 
+                ? (guestReviews.reduce((sum, r) => sum + r.rating, 0) / guestReviews.length).toFixed(1)
+                : 'Н/Д';
+            
+            const content = `
+                <div class="guest-profile">
+                    <div class="profile-sidebar">
+                        <div class="profile-avatar">${guest.name.charAt(0)}</div>
+                        <div class="profile-name">${guest.name}</div>
+                        <p style="color: #86868b; margin-bottom: 8px;">${guest.email}</p>
+                        <span class="risk-badge risk-${riskScore.level}">
+                            Риск: ${riskScore.score}%
+                        </span>
+                    </div>
+                    <div>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${guestBookings.length}</div>
+                                <div class="stat-label">Броней</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${avgRating}</div>
+                                <div class="stat-label">Средняя оценка</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${guestReviews.length}</div>
+                                <div class="stat-label">Отзывов</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin: 24px 0 16px;">История отзывов</h3>
+                        ${guestReviews.length === 0 ? '<p style="color: #86868b;">Нет отзывов</p>' : 
+                            guestReviews.map(r => `
+                                <div class="review-item">
+                                    <div class="review-header">
+                                        <span class="review-hotel">Оценка: ${r.rating}/5</span>
+                                        <span class="review-date">${formatDate(r.createdAt)}</span>
+                                    </div>
+                                    <p>${r.comment}</p>
+                                    ${r.hasIncident ? '<span class="risk-badge risk-high">Был инцидент</span>' : ''}
+                                </div>
+                            `).join('')
+                        }
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('guestProfileContent').innerHTML = content;
+            openModal('guestProfileModal');
+        }
+        
+        // Открыть форму отзыва
+        function openReviewModal(bookingId) {
+            document.getElementById('reviewBookingId').value = bookingId;
+            openModal('newReviewModal');
+        }
+        
+        // Отправить отзыв
+        function submitReview() {
+            const bookingId = parseInt(document.getElementById('reviewBookingId').value);
+            const rating = parseInt(document.getElementById('reviewRating').value);
+            const comment = document.getElementById('reviewComment').value;
+            const hasIncident = document.getElementById('reviewIncident').value === 'yes';
+            
+            const booking = bookings.find(b => b.id === bookingId);
+            
+            const review = {
+                id: Date.now(),
+                bookingId: bookingId,
+                guestId: booking.guestId,
+                rating: rating,
+                comment: comment,
+                hasIncident: hasIncident,
+                createdAt: new Date().toISOString()
+            };
+            
+            reviews.push(review);
+            booking.status = 'completed';
+            
+            // Закрыть депозит
+            const deposit = deposits.find(d => d.bookingId === bookingId);
+            if (deposit) {
+                deposit.status = hasIncident ? 'charged' : 'returned';
+            }
+            
+            saveData();
+            closeModal('newReviewModal');
+            renderBookings();
+            
+            // Очистка формы
+            document.getElementById('reviewRating').value = '5';
+            document.getElementById('reviewComment').value = '';
+            document.getElementById('reviewIncident').value = 'no';
+            
+            alert('Отзыв успешно добавлен!');
+        }
+        
+        // Отрисовка списка отзывов
+        function renderReviews() {
+            const list = document.getElementById('reviewsList');
+            if (reviews.length === 0) {
+                list.innerHTML = '<p style="color: #86868b; text-align: center; padding: 40px;">Нет отзывов</p>';
+                return;
+            }
+            
+            list.innerHTML = reviews.map(r => {
+                const guest = guests.find(g => g.id === r.guestId);
+                return `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-hotel"><strong>${guest.name}</strong> • Оценка: ${r.rating}/5</span>
+                            <span class="review-date">${formatDate(r.createdAt)}</span>
+                        </div>
+                        <p>${r.comment}</p>
+                        ${r.hasIncident ? '<span class="risk-badge risk-high">Был инцидент</span>' : '<span class="risk-badge risk-low">Без инцидентов</span>'}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Отрисовка списка депозитов
+        function renderDeposits() {
+            const list = document.getElementById('depositsList');
+            if (deposits.length === 0) {
+                list.innerHTML = '<p style="color: #86868b; text-align: center; padding: 40px;">Нет депозитов</p>';
+                return;
+            }
+            
+            list.innerHTML = deposits.map(d => {
+                const booking = bookings.find(b => b.id === d.bookingId);
+                const statusText = d.status === 'pending' ? 'Ожидает' : d.status === 'held' ? 'Заблокирован' : d.status === 'returned' ? 'Возвращен' : 'Списан';
+                const statusClass = d.status === 'returned' ? 'low' : d.status === 'charged' ? 'high' : 'medium';
+                
+                return `
+                    <div class="booking-item">
+                        <div class="booking-info">
+                            <h3>${booking.guestName}</h3>
+                            <p>Сумма: ${d.amount}₽ • Комната ${booking.room}</p>
+                        </div>
+                        <span class="risk-badge risk-${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Обновление аналитики
+        function updateAnalytics() {
+            document.getElementById('totalBookings').textContent = bookings.length;
+            document.getElementById('totalGuests').textContent = guests.length;
+            document.getElementById('totalReviews').textContent = reviews.length;
+        }
+        
+        // Форматирование даты
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+    </script>
+</body>
+</html>
